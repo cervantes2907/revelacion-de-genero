@@ -50,6 +50,12 @@ export default function Home() {
               className="drop-shadow-xl"
               
             />
+             <audio autoPlay loop>
+            <source src="/music-box-34179.mp3" type="audio/mpeg" />
+          </audio>
+             <audio autoPlay loop>
+            <source src="/sound-effect-baby-laughing-01-237186.mp3" type="audio/mpeg" />
+          </audio>
           </div>
         </div>
       )}
