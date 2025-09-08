@@ -39,7 +39,7 @@ export default function Home() {
       ) : (
         <div className="text-center">
           <h2 className="text-5xl font-extrabold text-pink-600 mb-10 animate-bounce drop-shadow-lg">
-            💕 Hola, soy una hermosa niña me llamo Christina Isabel 💕
+            💕 Hola, soy una hermosa niña me llamo Christina Isabel Cervantes Ruiz 💕
           </h2>
 
           {/* Imagen de bebé feliz */}
