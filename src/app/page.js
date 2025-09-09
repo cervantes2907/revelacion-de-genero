@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 
@@ -7,10 +7,53 @@ export default function Home() {
   const [revealed, setRevealed] = useState(false);
   const { width, height } = useWindowSize();
 
+  // 📸 Lista de imágenes desde /public
+  const images = [
+    "bebe.jpg",
+    "/imgEco1.jpg",
+    "/imgEco2.jpg",
+    "/imgEco3.jpg",
+    "/imgEco4.jpg",
+    "/imgEco5.jpg",
+    "/imgEco6.jpg",
+  ];
+
+  const [currentImage, setCurrentImage] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  // ⏱ Carrusel automático cada 6s
+  useEffect(() => {
+    if (revealed) {
+      const interval = setInterval(() => {
+        handleNext();
+      }, 6000);
+      return () => clearInterval(interval);
+    }
+  }, [revealed]);
+
+  // 🔘 Funciones con animación
+  const handleNext = () => {
+    setFade(false); // empieza fade-out
+    setTimeout(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+      setFade(true); // activa fade-in
+    }, 500);
+  };
+
+  const handlePrev = () => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
+      setFade(true);
+    }, 500);
+  };
+
   return (
     <div
       className={`flex flex-col items-center justify-center min-h-screen transition-all duration-1000 ${
-        revealed ? "bg-gradient-to-br from-pink-100 to-pink-300" : "bg-gradient-to-br from-gray-100 to-gray-300"
+        revealed
+          ? "bg-gradient-to-br from-pink-100 to-pink-300"
+          : "bg-gradient-to-br from-gray-100 to-gray-300"
       }`}
     >
       {!revealed ? (
@@ -37,26 +80,45 @@ export default function Home() {
           </button>
         </div>
       ) : (
-        <div className="text-center">
+        <div className="text-center relative">
           <h2 className="text-5xl font-extrabold text-pink-600 mb-10 animate-bounce drop-shadow-lg">
-            💕 Hola, soy una hermosa niña me llamo Christina Isabel Cervantes Hernandez 💕
+            💕 Hola, soy una hermosa niña me llamo Christina Isabel Cervantes Hernandez💕
           </h2>
 
-          {/* Imagen de bebé feliz */}
-          <div className="mx-auto w-100 h-100">
+          {/* Carrusel con animación */}
+          <div className="relative w-[500px] h-[500px] mx-auto overflow-hidden">
             <img
-              src="https://static.vecteezy.com/system/resources/thumbnails/036/211/619/small_2x/ai-generated-cute-baby-girl-smiling-cheerful-small-portrait-of-happiness-generated-by-ai-free-photo.jpg"
-              alt="Bebé niña"
-              className="drop-shadow-xl"
-              
+              src={images[currentImage]}
+              alt="Carrusel bebé"
+              className={`w-full h-full object-cover rounded-2xl shadow-xl transform transition-all duration-700 ${
+                fade ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
             />
-             <audio autoPlay loop>
+
+            {/* Botón anterior */}
+            <button
+              onClick={handlePrev}
+              className="absolute top-1/2 left-0 -translate-y-1/2 bg-pink-500 text-white px-3 py-2 rounded-full shadow-lg hover:bg-pink-600"
+            >
+              ⟨
+            </button>
+
+            {/* Botón siguiente */}
+            <button
+              onClick={handleNext}
+              className="absolute top-1/2 right-0 -translate-y-1/2 bg-pink-500 text-white px-3 py-2 rounded-full shadow-lg hover:bg-pink-600"
+            >
+              ⟩
+            </button>
+          </div>
+
+          {/* Música de fondo */}
+          <audio autoPlay loop>
             <source src="/music-box-34179.mp3" type="audio/mpeg" />
           </audio>
-             <audio autoPlay loop>
+          <audio autoPlay>
             <source src="/sound-effect-baby-laughing-01-237186.mp3" type="audio/mpeg" />
           </audio>
-          </div>
         </div>
       )}
 
